@@ -1,6 +1,5 @@
 % Facts
 
-
 male("Shubham").
 male("Yogesh").
 male("Suresh").
@@ -9,6 +8,10 @@ male("Dev").
 male("Tekchand").
 male("Ashok").
 male("Deepu").
+male("Anil").
+male("Sachin").
+male("Deepak").
+
 
 
 female("Seema").
@@ -21,6 +24,10 @@ female("Anchal").
 female("Sarla").
 female("Meenu").
 female("Muniya").
+female("Poonam").
+female("Pooja").
+
+
 
 parent("Yogesh", "Mansi").
 parent("Yogesh", "Radha").
@@ -46,116 +53,124 @@ parent("Sarla", "Deepu").
 parent("Sarla", "Muniya").
 parent("Gyanwati", "Ashok").
 parent("Tekchand", "Ashok").
+parent("Anil", "Deepak").
+parent("Anil", "Pooja").
+parent("Anil", "Sachin").
+parent("Poonam", "Deepak").
+parent("Poonam", "Pooja").
+parent("Poonam", "Sachin").
+parent("Suresh", "Anil").
+parent("Suman", "Anil").
 
 
-
-child("Mansi", "Yogesh").
-child("Radha", "Yogesh").
-child("Shubham", "Yogesh").
-child("Mansi", "Seema").
-child("Radha", "Seema").
-child("Shubham", "Seema").
-child("Yogesh", "Suresh").
-child("Yogesh", "Suman").
-child("Seema", "Gyanwati").
-child("Mamta", "Gyanwati").
-child("Anchal", "Mamta").
-child("Dev", "Mamta").
-child("Anchal", "Pankaj").
-child("Dev", "Pankaj").
-child("Mamta", "Tekchand").
-child("Seema", "Tekchand").
-child("Meenu", "Sarla").
-child("Muniya", "Sarla").
-child("Deepu", "Sarla").
-child("Meenu", "Ashok").
-child("Muniya", "Ashok").
-child("Deepu", "Ashok").
-child("Ashok", "Gyanwati").
-child("Ashok", "Tekchand").
 
 spouse("Yogesh", "Seema").
 spouse("Suresh", "Suman").
 spouse("Pankaj", "Mamta").
 spouse("Gyanwati", "Tekchand").
 spouse("Ashok", "Sarla").
-
-is_spouse(X, Y) :- spouse(X, Y).
-is_spouse(X, Y) :- spouse(Y, X),!.
+spouse("Anil", "Poonam").
 
 
+
+child(Child, Parent) :- parent(Parent, Child).
+
+
+
+
+
+
+
+
+
+
+
+
+
+% rules for spouse
+is_spouse(X, Y) :- spouse(X, Y); spouse(Y,X).
 
 
 % rules for father
 is_father(Father, Child) :- 							male(Father), 
 						 								parent(Father, Child).
 
+
 % rules for mother
 is_mother(Mother, Child) :- 							female(Mother),
 						 								parent(Mother, Child).
+
 
 % rules for son
 is_son(Son, Parent) :- 									male(Son),
 														parent(Parent, Son).
 
+
 % rules for daughter
 is_daughter(Daughter, Parent) :- 						female(Daughter),
 						 	  							parent(Parent, Daughter).
 
+
 % rules for husband
 is_husband(Husband, Wife) :- 							male(Husband),
 									  					female(Wife),
-								      					is_spouse(Wife, Husband).
+								      					is_spouse(Husband, Wife).
+
 
 % rules for wife
-is_wife(Wife, Husband) :- 								female(Wife),
-								   						male(Husband),
-								  	 					is_spouse(Wife, Husband).
+is_wife(Wife, Husband) :- 								is_husband(Husband, Wife).
+
 
 % rules for sibling :- 
 is_sibling(Sibling1, Sibling2) :- 						is_mother(Mother, Sibling1),
 										   				is_mother(Mother, Sibling2),
+										   				Sibling1 \= Sibling2,
 										 			  	is_father(Father, Sibling1),
-										   				is_father(Father, Sibling2),
-										   				Sibling1 \= Sibling2.
+										   				is_father(Father, Sibling2).
 
 
 % rules for brother :- 
 is_brother(Brother, Sibling) :- 						male(Brother),
-										    			is_sibling(Brother, Sibling),
-										    			Sibling \= Brother.
+										    			is_sibling(Brother, Sibling).
 
 
 % rules for sister :- 
 is_sister(Sister, Sibling) :-   						female(Sister),
-										 				is_sibling(Sister, Sibling),
-										 				Sibling \= Sister.
+										 				is_sibling(Sister, Sibling).
 
 
 % rules for grandfather : assumed fathers father
-
 is_grandfather(G_father, G_Child) :- 					male(G_father),
-											  	 		child(G_Child, Parent),
-											  	 		male(Parent),
-											  	 		child(Parent, G_father).
+											  	 		child(G_Child, Father),
+											  	 		is_son(Father, G_father).
+
 
 % rules for grandmother: assumed fathers mother
 is_grandmother(G_mother, G_Child) :- 					female(G_mother),
-											  	 		child(G_Child, Parent),
-											  	 		male(Parent),
-											  	 		child(Parent, G_mother).
+											  	 		child(G_Child, Father),
+											  	 		is_son(Father, G_mother).
+
+
+% rules for grandparent
+is_grandparent(G_parent, G_Child) :- 					is_grandmother(G_parent, G_Child); is_grandfather(G_parent, G_Child).
+
 
 % rules for grandpa : assumed mothers father
 is_grandpa(G_father, G_Child) :-     					male(G_father),
-											  	 		child(G_Child, Parent),
-											  	 		female(Parent),
-											  	 		child(Parent, G_father).
+											  	 		child(G_Child, Mother),
+											  	 		is_daughter(Mother, G_father).
+
 
 % rules for grandma: assumed mothers mother
 is_grandma(G_mother, G_Child) :-     					female(G_mother),
-								  	 					child(G_Child, Parent),
-								  	 					female(Parent),
-								  	 					child(Parent, G_mother).
+								  	 					child(G_Child, Mother),
+								  	 					is_daughter(Mother, G_mother).
+
+
+
+
+
+
 
 
 
@@ -164,63 +179,101 @@ is_grandma(G_mother, G_Child) :-     					female(G_mother),
 
 
 % rules for daughter-in-law
-is_daughter_in_law(Daughter_in_law, Parent) :- 			female(Daughter_in_law),
-														is_husband(Husband, Daughter_in_law),
+is_daughter_in_law(Daughter_in_law, Parent) :- 			is_husband(Husband, Daughter_in_law),
 														child(Husband, Parent).
 
+
 % rules for son-in-law
-is_son_in_law(Son_in_law, Parent) :- 					male(Son_in_law),
-														is_wife(Wife, Son_in_law),
+is_son_in_law(Son_in_law, Parent) :- 					is_wife(Wife, Son_in_law),
 														child(Wife, Parent).
 
+
 % rules for father-in-law
-is_father_in_law(Father_in_law, Child_in_law) :- 		male(Father_in_law),
-										  				is_spouse(Child_in_law,Spouse),
+is_father_in_law(Father_in_law, Child_in_law) :- 		is_spouse(Child_in_law,Spouse),
 										  				is_father(Father_in_law, Spouse).
 
+
 % rules for mother-in-law
-is_mother_in_law(Mother_in_law, Child_in_law) :- 		female(Mother_in_law),
-										  				is_spouse(Child_in_law,Spouse),
+is_mother_in_law(Mother_in_law, Child_in_law) :- 		is_spouse(Child_in_law,Spouse),
 										  				is_mother(Mother_in_law, Spouse).
 
 
 
 
-% rules for uncle
-is_uncle(Uncle, Child) :- 								male(Uncle),
-						  								parent(Parent, Child),
+
+
+
+
+
+
+
+
+% rules for uncle : brother of Childs parent
+is_uncle(Uncle, Child) :- 								parent(Parent, Child),
 						  								is_brother(Uncle, Parent).
 
-% rules for aunt
-is_aunt(Aunt, Child) :- 								female(Aunt),
-						  								parent(Parent, Child),
+is_uncle(Uncle, Child) :- 								parent(Parent, Child),
+														is_husband(Uncle, Aunt),
 						  								is_sister(Aunt, Parent).
+
+
+% rules for aunt : sister of Childs parent
+is_aunt(Aunt, Child) :- 								parent(Parent, Child),
+						  								is_sister(Aunt, Parent).
+
+
+is_aunt(Aunt, Child) :- 								parent(Parent, Child),
+														is_wife(Aunt, Uncle),
+						  								is_brother(Uncle, Parent).
+
 
 % rules for cousin
 is_cousin(Cousin, Child) :- 							is_uncle(Uncle, Child),
 														child(Cousin, Uncle).
 
-
 is_cousin(Cousin, Child) :- 							is_aunt(Aunt, Child),
 														child(Cousin, Aunt).
 
+
 % rules for nephew
-is_nephew(Nephew, Uncle) :- 							male(Nephew),
-														is_sibling(Uncle, Sibling),
+is_nephew(Nephew, Uncle_or_Aunt) :- 					male(Nephew),
+														is_sibling(Uncle_or_Aunt, Sibling),
+														child(Nephew, Sibling).
+
+is_nephew(Nephew, Uncle_or_Aunt) :- 					male(Nephew),
+														is_spouse(Spouse, Uncle_or_Aunt),
+														is_sibling(Spouse, Sibling),
 														child(Nephew, Sibling).
 
 % rules for neice
-is_neice(Neice, Uncle) :-  								female(Neice),
-														is_sibling(Uncle, Sibling),
+is_neice(Neice, Uncle_or_Aunt) :-  						female(Neice),
+														is_sibling(Uncle_or_Aunt, Sibling),
 														child(Neice, Sibling).
 
+is_neice(Neice, Uncle_or_Aunt) :- 						female(Neice),
+														is_spouse(Spouse, Uncle_or_Aunt),
+														is_sibling(Spouse, Sibling),
+														child(Neice, Sibling).
+
+
 % rules for granduncle
-is_granduncle(G_uncle, Child) :- 						is_grandfather(G_father, Child),
-								 						is_brother(G_uncle, G_father).
+is_granduncle(G_uncle, Child) :- 						is_brother(G_uncle, G_parent),
+								 						is_grandparent(G_parent, Child).
 
 % rules for grandaunt
-is_grandaunt(G_aunt, Child) :-   						is_grandfather(G_father, Child),
-								 						is_sister(G_aunt, G_father).
+is_grandaunt(G_aunt, Child) :-   						is_sister(G_aunt, G_parent),
+								 						is_grandparent(G_parent, Child).
+
+
+
+
+
+
+
+
+
+
+
 
 
 
