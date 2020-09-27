@@ -5,19 +5,14 @@ career_advisory :-
 	writeln("This system helps you to choose most optimal career."),
 	writeln("Please give valid and accurate answers for the system to be most effective."),
 	dash,
-	career(X).
+	career(_).
 
 
 reset_system :-
 	retractall(answered(_, _)).
 
 dash :-
-	writeln("-----------------------------------------------------------------------------------------------").
-
-
-
-
-
+	writeln("--------------------------------------------------------------------------------------------------------------------------------------------------").
 
 
 
@@ -58,6 +53,8 @@ option(csai) :-
 option(ece) :-
 	writeln("ECE").
 
+
+
 query(cgpa) :- 
 	writeln("Please enter you CGPA").
 
@@ -82,9 +79,17 @@ query(Course, Name, Answer) :-
 	Selection = Answer.
 
 
+query(enterpreneur) :- 
+	writeln("Have you done Minor in Entrepreneurship?").
+	
+query(aptitude) :- 
+	writeln("Do you have good aptitude skills?").
+	
+query(social_sciences) :- 
+	writeln("Do you like social sciences?").
 
-
-
+query(gk) :-
+	writeln("Are you good in General knowledge and current affairs?").
 
 
 
@@ -146,6 +151,16 @@ print_career(economics) :-
 	writeln("You have great interest in visuals and photography and done relevant courses, so you may opt for Photographer"),
 	dash.
 
+print_career(enterpreneurship) :- 
+	dash,
+	writeln("You have done Minor in Entrepreneur which shows your interest in Entrepreneurship, so enjoy this new career and achieve great heights."),
+	dash.
+
+print_career(civil_services) :-
+	dash,
+	writeln("You have good aptitude skills and great interest in social sciences and are upto date with current world, so you may go for Civil services"),
+	dash.
+
 
 
 career(research) :-
@@ -171,11 +186,19 @@ career(research) :-
 
 career(job) :- 
 	cgpa(CGPA),
-	CGPA >= 6,
-	career_interest(job),
-	branch(Branch),
-	field(Y)
-	.
+	(
+		(
+		CGPA > 6,
+		career_interest(job),
+		branch(Branch),
+		field(F)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
+		)
+	).
 
 
 field(cse) :-
@@ -192,6 +215,11 @@ field(cse) :-
 			query(ap, "Advanced Programming", yes),
 			query(se, "Software Engineering", yes),
 			print_career(software_engineer)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 	).
 
@@ -205,16 +233,21 @@ field(csam) :-
 			print_career(cryptographer)
 		);
 		(
+			query(spa, "Stochastic Processes and Applications", yes),
+			query(da, "Data Analystics", yes),
+			query(ps, "Probablity and Statistics", yes),
+			print_career(statistician)
+		);
+		(
 			query(dmg, "Data Mining", yes),
 			query(dbms, "DBMS", yes),
 			query(dsa, "Data Structures and Algorithms", yes),
 			print_career(data_scientist)
 		);
 		(
-			query(spa, "Stochastic Processes and Applications", yes),
-			query(da, "Data Analystics", yes),
-			query(ps, "Probablity and Statistics", yes),
-			print_career(statistician)
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 	).
 
@@ -234,6 +267,11 @@ field(csai) :-
 			query(ap, "Advanced Programming", yes),
 			query(se, "Software Engineering", yes),
 			print_career(software_engineer)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 	).
 
@@ -253,6 +291,11 @@ field(ece) :-
 			query(dc, "Digital Circuits", yes),
 			query(eld, "Embedded Logic Design", yes),
 			print_career(hardware_design)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 
 	).
@@ -270,6 +313,11 @@ field(csss) :-
 			query(em, "Econometrics", yes),
 			query(me,"Macroeconomics", yes),
 			print_career(economist)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 	).
 
@@ -287,22 +335,67 @@ field(csd) :-
 			query(em, "Econometrics", yes),
 			query(me,"Macroeconomics", yes),
 			print_career(economist)
+		);
+		(
+			retractall(answered(career_interest, job)),
+			asserta(answered(career_interest, others)),
+			career(others)
 		)
 
 	).
 
 
+enterpreneur(Answer) :- answered(enterpreneur, Answer), !.
+enterpreneur(Answer) :- 
+	\+ answered(enterpreneur, _),
+	ask(enterpreneur, _Answer, [yes, no]),
+	Answer = _Answer.
+
+
+
+aptitude(Answer) :- answered(aptitude, Answer), !.
+aptitude(Answer) :- 
+	\+ answered(aptitude, _),
+	ask(aptitude, _Answer, [yes, no]),
+	Answer = _Answer.
+
+
+social_sciences(Answer) :- answered(social_sciences, Answer), !.
+social_sciences(Answer) :- 
+	\+ answered(social_sciences, _),
+	ask(social_sciences, _Answer, [yes, no]),
+	Answer = _Answer.
+
+
+gk(Answer) :- answered(gk, Answer), !.
+gk(Answer) :- 
+	\+ answered(gk, _),
+	ask(gk, _Answer, [yes, no]),
+	Answer = _Answer.
+
+
+
 
 career(others) :-
 	career_interest(others),
-	writeln("others").
+	(
+		(
+			enterpreneur(yes),  print_career(enterpreneurship)
+		);
+		(
+			aptitude(yes), social_sciences(yes), gk(yes), print_career(civil_services)
+		);
+		(
+			writeln("Sorry, unable to find suitable career for you.")
+		)
+	).
+
 
 branch(Branch) :- 
 	answered(branch, Branch), !.
 branch(Branch) :- 
 	\+ answered(branch, _ ),
 	ask(branch, _Branch, [cse, csam, csss, csd, csai, ece]), Branch = _Branch.
-
 
 
 
