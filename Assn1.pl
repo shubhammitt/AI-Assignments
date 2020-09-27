@@ -45,16 +45,12 @@ query(btp_done) :-
 
 print_career(research) :-
 	dash,
-	writeln("You have a awesome CGPA and also have good experience in research.\nSo, you may go for Research."),
+	writeln("You have a awesome CGPA and also have good experience in research.\nSo, you may go for Research/Higher Studies."),
 	dash.
 
 
 
 
-
-career(job) :- 
-	career_interest(CI), 
-	CI = job.
 
 career(research) :-
 	career_interest(CI), 
@@ -62,13 +58,23 @@ career(research) :-
 	ask(btp_done, Answer, [yes, no]),
 	(
 		( 
-			Answer = no, writeln("Research career is not suitable for you ")
+			Answer = no, 
+			writeln("Research career is not suitable for you.\nBut since you have good CGPA, so we would be exploring job career too."),
+			retractall(answered(career_interest, research)),
+			asserta(answered(career_interest, job)),
+			career(job)
 		);
 		(
-			Answer = yes, print_career(research)
+			Answer = yes, 
+			print_career(research)
 		)
 	).
 
+
+career(job) :- 
+	career_interest(CI), 
+	CI = job,
+	.
 
 
 
