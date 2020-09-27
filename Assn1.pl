@@ -1,5 +1,5 @@
 career_advisory :- 
-	reset_system,
+	reset_facts_learned,
 	dash,
 	writeln("Welcome to Career Advisory System for IIIT-D B.Tech students!"),
 	writeln("This system helps you to choose most optimal career."),
@@ -8,15 +8,11 @@ career_advisory :-
 	career(_).
 
 
-reset_system :-
+reset_facts_learned :-
 	retractall(answered(_, _)).
 
 dash :-
 	writeln("--------------------------------------------------------------------------------------------------------------------------------------------------").
-
-
-
-
 
 
 
@@ -55,6 +51,8 @@ option(ece) :-
 
 
 
+
+
 query(cgpa) :- 
 	writeln("Please enter you CGPA").
 
@@ -66,18 +64,6 @@ query(btp_done) :-
 
 query(branch) :-
 	writeln("What is your branch?").
-
-
-query(Course, Name, Answer) :- answered(Course, Answer), !.
-query(Course, Name, Answer) :-
-	\+ answered(Course, _),
-	write("Have you done the course "),write(Name),writeln("?"),
-	generate_options([yes, no], 1),
-	read(Index),
-	find_option(Index, [yes, no], Selection),
-	asserta(answered(Course, Selection)),
-	Selection = Answer.
-
 
 query(enterpreneur) :- 
 	writeln("Have you done Minor in Entrepreneurship?").
@@ -91,6 +77,21 @@ query(social_sciences) :-
 query(gk) :-
 	writeln("Are you good in General knowledge and current affairs?").
 
+query(Course, _ , Answer) :- 
+	answered(Course, Answer), !.
+query(Course, Name, Answer) :-
+	\+ answered(Course, _),
+	write("Have you done the course "),
+	write(Name),writeln("?"),
+	generate_options([yes, no], 1),
+	read(Index),
+	find_option(Index, [yes, no], Selection),
+	asserta(answered(Course, Selection)),
+	Selection = Answer.
+
+
+
+
 
 
 print_career(software_engineer) :- 
@@ -98,12 +99,10 @@ print_career(software_engineer) :-
 	writeln("You have pretty good coding skills with interest in dev. and codes, so you may opt for Software Engineering "),
 	dash.
 
-
 print_career(data_scientist) :- 
 	dash,
 	writeln("You have a decent CGPA with interest in coding, Data Mining and likes to visualize , so you may go for Data Scientist."),
 	dash.
-
 
 print_career(research) :-
 	dash,
@@ -119,7 +118,6 @@ print_career(statistician) :-
 	dash,
 	writeln("You like to play with numbers and have shown some interest in data analytics, so you may opt for Statistician."),
 	dash.
-
 
 print_career(ml_ai) :-
 	dash,
@@ -163,6 +161,10 @@ print_career(civil_services) :-
 
 
 
+
+
+
+
 career(research) :-
 	cgpa(CGPA),
 	CGPA > 9,
@@ -190,8 +192,8 @@ career(job) :-
 		(
 		CGPA > 6,
 		career_interest(job),
-		branch(Branch),
-		field(F)
+		branch(_),
+		field(_)
 		);
 		(
 			retractall(answered(career_interest, job)),
@@ -199,6 +201,29 @@ career(job) :-
 			career(others)
 		)
 	).
+
+
+career(others) :-
+	career_interest(others),
+	(
+		(
+			enterpreneur(yes),  
+			print_career(enterpreneurship)
+		);
+		(
+			cgpa(CGPA), 
+			CGPA >= 8, aptitude(yes), 
+			social_sciences(yes), 
+			gk(yes), 
+			print_career(civil_services)
+		);
+		(
+			writeln("Sorry, unable to find suitable career for you.")
+		)
+	).
+
+
+
 
 
 field(cse) :-
@@ -222,7 +247,6 @@ field(cse) :-
 			career(others)
 		)
 	).
-
 
 field(csam) :- 
 	branch(csam),
@@ -251,8 +275,6 @@ field(csam) :-
 		)
 	).
 
-
-
 field(csai) :- 
 	branch(csai),
 	(
@@ -274,8 +296,6 @@ field(csai) :-
 			career(others)
 		)
 	).
-
-
 
 field(ece) :-
 	branch(ece),
@@ -345,95 +365,6 @@ field(csd) :-
 	).
 
 
-enterpreneur(Answer) :- answered(enterpreneur, Answer), !.
-enterpreneur(Answer) :- 
-	\+ answered(enterpreneur, _),
-	ask(enterpreneur, _Answer, [yes, no]),
-	Answer = _Answer.
-
-
-
-aptitude(Answer) :- answered(aptitude, Answer), !.
-aptitude(Answer) :- 
-	\+ answered(aptitude, _),
-	ask(aptitude, _Answer, [yes, no]),
-	Answer = _Answer.
-
-
-social_sciences(Answer) :- answered(social_sciences, Answer), !.
-social_sciences(Answer) :- 
-	\+ answered(social_sciences, _),
-	ask(social_sciences, _Answer, [yes, no]),
-	Answer = _Answer.
-
-
-gk(Answer) :- answered(gk, Answer), !.
-gk(Answer) :- 
-	\+ answered(gk, _),
-	ask(gk, _Answer, [yes, no]),
-	Answer = _Answer.
-
-
-
-
-career(others) :-
-	career_interest(others),
-	(
-		(
-			enterpreneur(yes),  print_career(enterpreneurship)
-		);
-		(
-			aptitude(yes), social_sciences(yes), gk(yes), print_career(civil_services)
-		);
-		(
-			writeln("Sorry, unable to find suitable career for you.")
-		)
-	).
-
-
-branch(Branch) :- 
-	answered(branch, Branch), !.
-branch(Branch) :- 
-	\+ answered(branch, _ ),
-	ask(branch, _Branch, [cse, csam, csss, csd, csai, ece]), Branch = _Branch.
-
-
-
-career_interest(CI) :- 
-	answered(career_interest, CI), !.
-career_interest(CI) :- 
-	\+ answered(career_interest, _),
-	(
-		(
-			cgpa(CGPA), CGPA > 9 , ask(career_interest, _CI, [research, job, others]), CI = _CI
-		);
-		(
-			% CGPA is not suitable for Research career so taking job as interest
-			CI = job,
-			asserta(answered(career_interest, job))
-		)
-	).
-
-
-
-
-cgpa(CGPA) :- 
-	answered(cgpa, CGPA ), !.
-cgpa(CGPA) :- 
-	\+ answered(cgpa, _),
-	query(cgpa),
-	read(_CGPA),
-	(
-		(
-			(_CGPA > 10 ; _CGPA < 0), writeln("Invalid CGPA!\nTry again!"), cgpa(CGPA)
-		);
-		(
-			CGPA is _CGPA,
-			asserta(answered(cgpa, CGPA))
-		)
-	).
-
-
 
 ask(Question, Answer, Options) :-
 	query(Question),
@@ -456,3 +387,87 @@ generate_options([Head|Tail], Index) :-
 	option(Head),
 	Nextindex is Index + 1,
 	generate_options(Tail, Nextindex).
+
+
+
+
+enterpreneur(Answer) :- 
+	answered(enterpreneur, Answer), !.
+enterpreneur(Answer) :- 
+	\+ answered(enterpreneur, _),
+	ask(enterpreneur, ANSWER, [yes, no]),
+	Answer = ANSWER.
+
+
+
+aptitude(Answer) :- 
+	answered(aptitude, Answer), !.
+aptitude(Answer) :- 
+	\+ answered(aptitude, _),
+	ask(aptitude, ANSWER, [yes, no]),
+	Answer = ANSWER.
+
+
+
+social_sciences(Answer) :- 
+	answered(social_sciences, Answer), !.
+social_sciences(Answer) :- 
+	\+ answered(social_sciences, _),
+	ask(social_sciences, ANSWER, [yes, no]),
+	Answer = ANSWER.
+
+
+
+gk(Answer) :- 
+	answered(gk, Answer), !.
+gk(Answer) :- 
+	\+ answered(gk, _),
+	ask(gk, ANSWER, [yes, no]),
+	Answer = ANSWER.
+
+
+
+branch(Branch) :- 
+	answered(branch, Branch), !.
+branch(Branch) :- 
+	\+ answered(branch, _ ),
+	ask(branch, BRANCH, [cse, csam, csss, csd, csai, ece]), Branch = BRANCH.
+
+
+
+career_interest(CI) :- 
+	answered(career_interest, CI), !.
+career_interest(CI) :- 
+	\+ answered(career_interest, _),
+	(
+		(
+			cgpa(CGPA), CGPA > 9 , ask(career_interest, Ci, [research, job, others]), CI = Ci
+		);
+		(
+			% CGPA is not suitable for Research career so taking job as interest
+			CI = job,
+			asserta(answered(career_interest, job))
+		)
+	).
+
+
+
+
+cgpa(CGPA) :- 
+	answered(cgpa, CGPA ), !.
+cgpa(CGPA) :- 
+	\+ answered(cgpa, _),
+	query(cgpa),
+	read(Cgpa),
+	(
+		(
+			(Cgpa > 10 ; Cgpa < 0), writeln("Invalid CGPA!\nTry again!"), cgpa(CGPA)
+		);
+		(
+			CGPA is Cgpa,
+			asserta(answered(cgpa, CGPA))
+		)
+	).
+
+
+%  https://github.com/shivamgupta1/Career-Counsellor-expert-system
