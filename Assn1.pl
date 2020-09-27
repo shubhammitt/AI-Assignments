@@ -49,9 +49,6 @@ option(csam) :-
 option(csss) :-
 	writeln("CSSS").
 
-option(csb) :-
-	writeln("CSB").
-
 option(csd) :-
 	writeln("CSD").
 
@@ -136,7 +133,7 @@ print_career(hardware_design) :-
 
 print_career(philosopher) :- 
 	dash,
-	writeln("You have good knowledge about philosophy and done relevant courses, so you man go for Philosopher"),
+	writeln("You have good knowledge about philosophy and done relevant courses, so you may go for Philosopher"),
 	dash.
 
 print_career(economist) :-
@@ -144,6 +141,10 @@ print_career(economist) :-
 	writeln("You have pretty good knowledge about economics and done relevant courses and have decent grades ,so you may opt for Economist"),
 	dash.
 
+print_career(economics) :- 
+	dash,
+	writeln("You have great interest in visuals and photography and done relevant courses, so you may opt for Photographer"),
+	dash.
 
 
 
@@ -272,6 +273,23 @@ field(csss) :-
 		)
 	).
 
+field(csd) :- 
+	branch(csd),
+	(
+		(
+			query(ag, "Animation & Graphics", yes),
+			query(py, "Photography", yes),
+			query(vn,"Visualization", yes),
+			print_career(photographer)
+		);
+		(
+			query(gmt, "Game Theory", yes),
+			query(em, "Econometrics", yes),
+			query(me,"Macroeconomics", yes),
+			print_career(economist)
+		)
+
+	).
 
 
 
@@ -283,7 +301,7 @@ branch(Branch) :-
 	answered(branch, Branch), !.
 branch(Branch) :- 
 	\+ answered(branch, _ ),
-	ask(branch, _Branch, [cse, csam, csss, csb, csd, csai, ece]), Branch = _Branch.
+	ask(branch, _Branch, [cse, csam, csss, csd, csai, ece]), Branch = _Branch.
 
 
 
