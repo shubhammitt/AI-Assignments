@@ -124,6 +124,29 @@ print_career(ml_ai) :-
 	writeln("You have very good experience in AI and ML and decent coding skills, so you may opt for ML/AI engineer."),
 	dash.
 
+print_career(robotic_engineer) :-
+	dash,
+	writeln("You have decent coding skills and have some hands on experience in robos and ml, so you may opt for Robotics"),
+	dash.
+
+print_career(hardware_design) :-
+	dash,
+	writeln("You have good knowledge in signals and hardware and have played with it, so you may go for Hardware Design/Engineer"),
+	dash.
+
+print_career(philosopher) :- 
+	dash,
+	writeln("You have good knowledge about philosophy and done relevant courses, so you man go for Philosopher"),
+	dash.
+
+print_career(economist) :-
+	dash,
+	writeln("You have pretty good knowledge about economics and done relevant courses and have decent grades ,so you may opt for Economist"),
+	dash.
+
+
+
+
 career(research) :-
 	cgpa(CGPA),
 	CGPA > 9,
@@ -181,6 +204,12 @@ field(csam) :-
 			print_career(cryptographer)
 		);
 		(
+			query(dmg, "Data Mining", yes),
+			query(dbms, "DBMS", yes),
+			query(dsa, "Data Structures and Algorithms", yes),
+			print_career(data_scientist)
+		);
+		(
 			query(spa, "Stochastic Processes and Applications", yes),
 			query(da, "Data Analystics", yes),
 			query(ps, "Probablity and Statistics", yes),
@@ -196,7 +225,7 @@ field(csai) :-
 		(
 			query(ml, "Machine Learning", yes),
 			query(ai, "Artificial Intelligence", yes),
-			query(ip, "Introduction to Programming", yes)
+			query(ip, "Introduction to Programming", yes),
 			print_career(ml_ai)
 		);
 		(
@@ -209,6 +238,39 @@ field(csai) :-
 
 
 
+field(ece) :-
+	branch(ece),
+	(
+		(
+			query(cnt, "Nonlinear and Adaptive Control of Robotic Systems", yes),
+			query(ip, "Introduction to Programming", yes),
+			query(ml, "Machine Learning", yes),
+			print_career(robotic_engineer)
+		);
+		(
+			query(ss, "Signals & Systems", yes),
+			query(dc, "Digital Circuits", yes),
+			query(eld, "Embedded Logic Design", yes),
+			print_career(hardware_design)
+		)
+
+	).
+
+field(csss) :-
+	branch(csss),
+	(
+		(
+			query(pt, "Philosophy of Technology", yes),
+			query(i_p, "Introduction to Philosophy", yes),
+			print_career(philosopher)
+		);
+		(
+			query(gmt, "Game Theory", yes),
+			query(em, "Econometrics", yes),
+			query(me,"Macroeconomics", yes),
+			print_career(economist)
+		)
+	).
 
 
 
@@ -273,7 +335,7 @@ ask(Question, Answer, Options) :-
 
 find_option(1, [Head|_] , Head).
 find_option(Index, [_|Tail], Result) :-
-	Nextindex is Index -1,
+	Nextindex is Index - 1,
 	find_option(Nextindex, Tail, Result).
 
 
