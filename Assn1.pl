@@ -5,8 +5,7 @@ career_advisory :-
 	writeln("This system helps you to choose most optimal career."),
 	writeln("Please give valid and accurate answers for the system to be most effective."),
 	dash,
-	cgpa(CGPA),
-	career_interest(CI).
+	career(X).
 
 
 reset_system :-
@@ -16,17 +15,61 @@ dash :-
 	writeln("-----------------------------------------------------------------------------------------------").
 
 
+
 option(research) :- 
 	writeln("A Reseacher").
 
 option(job) :- 
 	writeln("A Job").
 
+option(yes) :-
+	writeln("Yes").
+
+option(no) :- 
+	writeln("No").
+
+
+
 query(cgpa) :- 
 	writeln("Please enter you CGPA").
 
 query(career_interest) :-
 	writeln("In what type of career you are interested in?").
+
+query(btp_done) :- 
+	writeln("Have you done some kind of BTP during the B.Tech or has some kind of research work?").
+
+
+
+
+
+print_career(research) :-
+	dash,
+	writeln("You have a awesome CGPA and also have good experience in research.\nSo, you may go for Research."),
+	dash.
+
+
+
+
+
+career(job) :- 
+	career_interest(CI), 
+	CI = job.
+
+career(research) :-
+	career_interest(CI), 
+	CI = research,
+	ask(btp_done, Answer, [yes, no]),
+	(
+		( 
+			Answer = no, writeln("Research career is not suitable for you ")
+		);
+		(
+			Answer = yes, print_career(research)
+		)
+	).
+
+
 
 
 career_interest(CI) :- 
@@ -37,7 +80,7 @@ career_interest(CI) :-
 		cgpa(CGPA), CGPA >= 9 , ask(career_interest, CI, [research, job]), !
 	);
 	(
-		% CGPA is not suitable for Reaserch career so taking job as interest
+		% CGPA is not suitable for Research career so taking job as interest
 		asserta(answered(career_interest, job))
 	).
 
@@ -58,6 +101,8 @@ cgpa(CGPA) :-
 			asserta(answered(cgpa, CGPA))
 		)
 	).
+
+
 
 ask(Question, Answer, Options) :-
 	query(Question),
