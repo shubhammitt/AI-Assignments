@@ -215,6 +215,7 @@ career(others) :-
 			gk(yes), 
 			print_career(civil_services)
 		);
+
 		(
 			writeln("Sorry, unable to find suitable career for you.")
 		)
@@ -237,6 +238,9 @@ field(cse) :-
 			query(ap, "Advanced Programming", yes),
 			query(se, "Software Engineering", yes),
 			print_career(software_engineer)
+		);
+		(
+			options_in_other_branches
 		);
 		(
 			retractall(answered(career_interest, job)),
@@ -266,6 +270,9 @@ field(csam) :-
 			print_career(data_scientist)
 		);
 		(
+			options_in_other_branches
+		);
+		(
 			retractall(answered(career_interest, job)),
 			asserta(answered(career_interest, others)),
 			career(others)
@@ -286,6 +293,9 @@ field(csai) :-
 			query(ap, "Advanced Programming", yes),
 			query(se, "Software Engineering", yes),
 			print_career(software_engineer)
+		);
+		(
+			options_in_other_branches
 		);
 		(
 			retractall(answered(career_interest, job)),
@@ -310,6 +320,9 @@ field(ece) :-
 			print_career(hardware_design)
 		);
 		(
+			options_in_other_branches
+		);
+		(
 			retractall(answered(career_interest, job)),
 			asserta(answered(career_interest, others)),
 			career(others)
@@ -330,6 +343,9 @@ field(csss) :-
 			query(em, "Econometrics", yes),
 			query(me,"Macroeconomics", yes),
 			print_career(economist)
+		);
+		(
+			options_in_other_branches
 		);
 		(
 			retractall(answered(career_interest, job)),
@@ -354,12 +370,25 @@ field(csd) :-
 			print_career(economist)
 		);
 		(
+			options_in_other_branches
+		);
+		(
 			retractall(answered(career_interest, job)),
 			asserta(answered(career_interest, others)),
 			career(others)
 		)
 
 	).
+
+
+options_in_other_branches :- 
+	\+ answered(other_branches, _),
+	asserta(answered(other_branches, yes)),
+	answered(branch, B),
+	select(B, [cse, csam, csss, csd, csai, ece ], Rest_branches),
+	retractall(answered(branch, _)),
+	ask(branch, BRANCH, Rest_branches),
+	field(BRANCH).
 
 
 
