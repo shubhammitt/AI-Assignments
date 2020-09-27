@@ -13,7 +13,7 @@ reset_facts_learned :-
 	retractall(answered(_, _)).
 
 dash :-
-	writeln("------------------------------------------------------------------------------------------------------------------------------------------------------------------------").
+	writeln("-------------------------------------------------------------------------------------------------------------------------------------------------------------------").
 
 
 
@@ -64,7 +64,7 @@ query(btp_done) :-
 	writeln("Have you done some kind of BTP during the B.Tech or has some kind of research work?").
 
 query(branch) :-
-	writeln("What is your branch?").
+	writeln("Choose branch :- ").
 
 query(enterpreneur) :- 
 	writeln("Have you done Minor in Entrepreneurship?").
@@ -78,6 +78,9 @@ query(social_sciences) :-
 query(gk) :-
 	writeln("Are you good in General knowledge and current affairs?").
 
+query(artist) :- 
+	writeln("Do you like drawings, sketches or colors?").
+
 query(Course, _ , Answer) :- 
 	answered(Course, Answer), !.
 query(Course, Name, Answer) :-
@@ -89,8 +92,6 @@ query(Course, Name, Answer) :-
 	find_option(Index, [yes, no], Selection),
 	asserta(answered(Course, Selection)),
 	Selection = Answer.
-
-
 
 
 
@@ -160,6 +161,10 @@ print_career(civil_services) :-
 	writeln("You have good aptitude skills and great interest in social sciences and are upto date with current world, so you may go for Civil services"),
 	dash.
 
+print_career(artist) :- 
+	dash,
+	writeln("You like to play with sketches, colors and shades so go for Artist"),
+	dash.
 
 
 % Career options are :- Research, Job, Non-tech like civil_services, enterpreneurship.
@@ -171,7 +176,9 @@ career(research) :-
 	(
 		( 
 			Answer = no, 
+			dash,
 			writeln("Research career is not suitable for you.\nBut since you have good CGPA, so we would be exploring job career too."),
+			dash,
 			retract(answered(career_interest, research)),
 			asserta(answered(career_interest, job)),
 			career(job)
@@ -215,7 +222,10 @@ career(others) :-
 			gk(yes), 
 			print_career(civil_services)
 		);
-
+		(
+			artist(yes),
+			print_career(artist)
+		);
 		(
 			writeln("Sorry, unable to find suitable career for you.")
 		)
@@ -387,6 +397,8 @@ options_in_other_branches :-
 	answered(branch, B),
 	select(B, [cse, csam, csss, csd, csai, ece ], Rest_branches),
 	retractall(answered(branch, _)),
+	dash,
+	writeln("Sadly, there are no career options in your branch, You may try choosing another branch which you may like and has interest"),
 	ask(branch, BRANCH, Rest_branches),
 	field(BRANCH).
 
@@ -449,6 +461,14 @@ gk(Answer) :-
 gk(Answer) :- 
 	\+ answered(gk, _),
 	ask(gk, ANSWER, [yes, no]),
+	Answer = ANSWER.
+
+
+artist(Answer) :- 
+	answered(artist, Answer), !.
+artist(Answer) :- 
+	\+ answered(artist, _),
+	ask(artist, ANSWER, [yes, no]),
 	Answer = ANSWER.
 
 
