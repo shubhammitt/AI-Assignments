@@ -8,11 +8,12 @@ career_advisory :-
 	career(_).
 
 
+% so that current execution will not conflict with previous execution of the code.
 reset_facts_learned :-
 	retractall(answered(_, _)).
 
 dash :-
-	writeln("--------------------------------------------------------------------------------------------------------------------------------------------------").
+	writeln("------------------------------------------------------------------------------------------------------------------------------------------------------------------------").
 
 
 
@@ -161,10 +162,7 @@ print_career(civil_services) :-
 
 
 
-
-
-
-
+% Career options are :- Research, Job, Non-tech like civil_services, enterpreneurship.
 career(research) :-
 	cgpa(CGPA),
 	CGPA > 9,
@@ -224,8 +222,7 @@ career(others) :-
 
 
 
-
-
+% field means career relevant to your branch. If no suitable career is found by current branch then we explore other carrer options like enterpreneurship, civil_services.
 field(cse) :-
 	branch(cse),
 	(
@@ -470,4 +467,14 @@ cgpa(CGPA) :-
 	).
 
 
-%  https://github.com/shivamgupta1/Career-Counsellor-expert-system
+/*
+Shubham Mittal
+2018101
+Assignment-1  
+References
+https://iiitd.ac.in/sites/default/files/docs/education/2020/2020-June-B.Tech(CSSS)-Regulations.pdf
+https://iiitd.ac.in/sites/default/files/docs/education/2019/2019-August-B.Tech(CSD)-Regulations.pdf
+https://www.collegedekho.com/careers/sociologist
+https://github.com/shivamgupta1/Career-Counsellor-expert-system
+https://www.collegedekho.com/careers/sociologist
+*/
