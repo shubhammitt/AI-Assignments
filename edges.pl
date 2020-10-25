@@ -79,6 +79,7 @@ edges("Agra","Pondicherry",2210).
 edges("Pondicherry","Agra",2210).
 edges("Agra","Pune",1214).
 edges("Pune","Agra",1214).
+edges("Ahmedabad","Ahmedabad",0).
 edges("Ahmedabad","Bangalore",1490).
 edges("Bangalore","Ahmedabad",1490).
 edges("Ahmedabad","Bhubaneshwar",1697).
@@ -239,6 +240,7 @@ edges("Asansol","Pune",1955).
 edges("Pune","Asansol",1955).
 edges("Bangalore","Ahmedabad",1490).
 edges("Ahmedabad","Bangalore",1490).
+edges("Bangalore","Bangalore",0).
 edges("Bangalore","Bhubaneshwar",1538).
 edges("Bhubaneshwar","Bangalore",1538).
 edges("Bangalore","Bombay",1013).
@@ -359,6 +361,7 @@ edges("Bhubaneshwar","Ahmedabad",1647).
 edges("Ahmedabad","Bhubaneshwar",1647).
 edges("Bhubaneshwar","Bangalore",1538).
 edges("Bangalore","Bhubaneshwar",1538).
+edges("Bhubaneshwar","Bhubaneshwar",0).
 edges("Bhubaneshwar","Bombay",1679).
 edges("Bombay","Bhubaneshwar",1679).
 edges("Bhubaneshwar","Calcutta",423).
@@ -399,6 +402,7 @@ edges("Bombay","Bangalore",1013).
 edges("Bangalore","Bombay",1013).
 edges("Bombay","Bhubaneshwar",1678).
 edges("Bhubaneshwar","Bombay",1678).
+edges("Bombay","Bombay",0).
 edges("Bombay","Calcutta",2012).
 edges("Calcutta","Bombay",2012).
 edges("Bombay","Chandigarh",1645).
@@ -439,6 +443,7 @@ edges("Calcutta","Bhubaneshwar",423).
 edges("Bhubaneshwar","Calcutta",423).
 edges("Calcutta","Bombay",2012).
 edges("Bombay","Calcutta",2012).
+edges("Calcutta","Calcutta",0).
 edges("Calcutta","Chandigarh",1721).
 edges("Chandigarh","Calcutta",1721).
 edges("Calcutta","Cochin",2318).
@@ -519,6 +524,7 @@ edges("Chandigarh","Bombay",1645).
 edges("Bombay","Chandigarh",1645).
 edges("Chandigarh","Calcutta",1721).
 edges("Calcutta","Chandigarh",1721).
+edges("Chandigarh","Chandigarh",0).
 edges("Chandigarh","Cochin",1965).
 edges("Cochin","Chandigarh",1965).
 edges("Chandigarh","Delhi",248).
@@ -559,6 +565,7 @@ edges("Cochin","Calcutta",2318).
 edges("Calcutta","Cochin",2318).
 edges("Cochin","Chandigarh",1965).
 edges("Chandigarh","Cochin",1965).
+edges("Cochin","Cochin",0).
 edges("Cochin","Delhi",2718).
 edges("Delhi","Cochin",2718).
 edges("Cochin","Hyderabad",1090).
@@ -639,6 +646,7 @@ edges("Delhi","Chandigarh",248).
 edges("Chandigarh","Delhi",248).
 edges("Delhi","Cochin",2718).
 edges("Cochin","Delhi",2718).
+edges("Delhi","Delhi",0).
 edges("Delhi","Hyderabad",1477).
 edges("Hyderabad","Delhi",1477).
 edges("Delhi","Indore",806).
@@ -759,6 +767,7 @@ edges("Hyderabad","Cochin",1090).
 edges("Cochin","Hyderabad",1090).
 edges("Hyderabad","Delhi",1447).
 edges("Delhi","Hyderabad",1447).
+edges("Hyderabad","Hyderabad",0).
 edges("Hyderabad","Indore",999).
 edges("Indore","Hyderabad",999).
 edges("Hyderabad","Jaipur",1404).
@@ -839,6 +848,7 @@ edges("Indore","Delhi",806).
 edges("Delhi","Indore",806).
 edges("Indore","Hyderabad",999).
 edges("Hyderabad","Indore",999).
+edges("Indore","Indore",0).
 edges("Indore","Jaipur",405).
 edges("Jaipur","Indore",405).
 edges("Indore","Kanpur",689).
@@ -919,6 +929,7 @@ edges("Jaipur","Hyderabad",1404).
 edges("Hyderabad","Jaipur",1404).
 edges("Jaipur","Indore",405).
 edges("Indore","Jaipur",405).
+edges("Jaipur","Jaipur",0).
 edges("Jaipur","Kanpur",517).
 edges("Kanpur","Jaipur",517).
 edges("Jaipur","Lucknow",598).
@@ -1039,6 +1050,7 @@ edges("Kanpur","Indore",689).
 edges("Indore","Kanpur",689).
 edges("Kanpur","Jaipur",517).
 edges("Jaipur","Kanpur",517).
+edges("Kanpur","Kanpur",0).
 edges("Kanpur","Lucknow",79).
 edges("Lucknow","Kanpur",79).
 edges("Kanpur","Madras",2049).
@@ -1119,6 +1131,7 @@ edges("Lucknow","Jaipur",598).
 edges("Jaipur","Lucknow",598).
 edges("Lucknow","Kanpur",79).
 edges("Kanpur","Lucknow",79).
+edges("Lucknow","Lucknow",0).
 edges("Lucknow","Madras",2128).
 edges("Madras","Lucknow",2128).
 edges("Lucknow","Nagpur",856).
@@ -1199,6 +1212,7 @@ edges("Madras","Kanpur",2049).
 edges("Kanpur","Madras",2049).
 edges("Madras","Lucknow",2128).
 edges("Lucknow","Madras",2128).
+edges("Madras","Madras",0).
 edges("Madras","Nagpur",1272).
 edges("Nagpur","Madras",1272).
 edges("Madras","Nasik",1366).
@@ -1319,6 +1333,7 @@ edges("Nagpur","Lucknow",856).
 edges("Lucknow","Nagpur",856).
 edges("Nagpur","Madras",1272).
 edges("Madras","Nagpur",1272).
+edges("Nagpur","Nagpur",0).
 edges("Nagpur","Nasik",700).
 edges("Nasik","Nagpur",700).
 edges("Nagpur","Panjim",1247).
@@ -1359,6 +1374,7 @@ edges("Nasik","Madras",1366).
 edges("Madras","Nasik",1366).
 edges("Nasik","Nagpur",700).
 edges("Nagpur","Nasik",700).
+edges("Nasik","Nasik",0).
 edges("Nasik","Panjim",701).
 edges("Panjim","Nasik",701).
 edges("Nasik","Patna",1679).
@@ -1399,6 +1415,7 @@ edges("Panjim","Nagpur",1247).
 edges("Nagpur","Panjim",1247).
 edges("Panjim","Nasik",701).
 edges("Nasik","Panjim",701).
+edges("Panjim","Panjim",0).
 edges("Panjim","Patna",1804).
 edges("Patna","Panjim",1804).
 edges("Panjim","Pondicherry",739).
@@ -1439,6 +1456,7 @@ edges("Patna","Nasik",1679).
 edges("Nasik","Patna",1679).
 edges("Patna","Panjim",1804).
 edges("Panjim","Patna",1804).
+edges("Patna","Patna",0).
 edges("Patna","Pondicherry",2264).
 edges("Pondicherry","Patna",2264).
 edges("Patna","Pune",1738).
@@ -1479,6 +1497,7 @@ edges("Pondicherry","Panjim",739).
 edges("Panjim","Pondicherry",739).
 edges("Pondicherry","Patna",2264).
 edges("Patna","Pondicherry",2264).
+edges("Pondicherry","Pondicherry",0).
 edges("Pondicherry","Pune",1154).
 edges("Pune","Pondicherry",1154).
 edges("Pune","Ahmedabad",664).
@@ -1519,6 +1538,7 @@ edges("Pune","Patna",1738).
 edges("Patna","Pune",1738).
 edges("Pune","Pondicherry",1154).
 edges("Pondicherry","Pune",1154).
+edges("Pune","Pune",0).
 edges("Ranchi","Ahmedabad",1781).
 edges("Ahmedabad","Ranchi",1781).
 edges("Ranchi","Bangalore",2098).

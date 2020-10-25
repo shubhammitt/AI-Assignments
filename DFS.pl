@@ -14,23 +14,25 @@ retracepath(Destination, Source, Cost) :-
 	(
 		(
 			\+ predecessor(_, Destination), 
-			writeln(Source),
-			write("Cost is "),
+			write("Cost = "),
 			write(Cost),
 			writeln(" KMs"),
+			write(Source),
 			!
 		);
 		(
 			predecessor(X, Destination),
 			edges(X, Destination, C),
 			NewCost is Cost + C,
-			write(Destination),
-			write("<--"),
-			retracepath(X, Source, NewCost)
+			retracepath(X, Source, NewCost),
+			write(" --> "),
+			write(Destination)
 		)
 	).
 
+dfs(Source, Source, _, _) :- writeln("You are at Destination only!").
 dfs(Source, Destination, Open, Closed) :-
+	Source \= Destination,
 	(
 		(
 			Open = [], 
@@ -39,30 +41,26 @@ dfs(Source, Destination, Open, Closed) :-
 		);
 		(
 			getFirstElement(Open, S),  %get first node from Open
-			select(S, Open, NewOpen),  %remove first node from Open
-			append([S], Closed, NewClosed), %insert first node in Closed
+			select(S, Open, Open1),  %remove first node from Open
+			append(Closed, [S], NewClosed), %insert first node in Closed
 			findall(Successor, edges(S, Successor, _), ListOfSuccessors),
 			subtract(ListOfSuccessors, NewClosed, ListOfUnvisitedSuccessors),
 			(
 				(
 					member(Destination, ListOfUnvisitedSuccessors),
-					writeln("Path Found"),
+					writeln("Path Found!"),
 					addAssert(S, [Destination]),
 					retracepath(Destination, Source, 0),
 					!
 				);
 				(
 					reverse(ListOfUnvisitedSuccessors, X),
-					append(X, NewOpen, NewOpen1),
+					append(X, Open1, Open2),
 					addAssert(S, X),
-					dfs(Source, Destination, NewOpen1, NewClosed)
+					dfs(Source, Destination, Open2, NewClosed)
 				)
-
 			)
-
-
 		)
 	).
 
-
-:- dfs("Agartala", "Hubli",  ["Agartala"], []).
+:- dfs("Agartala", "Agra",  ["Agartala"], []).
