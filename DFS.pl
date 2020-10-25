@@ -65,5 +65,4 @@ dfs(Source, Destination, Open, Closed) :-
 	).
 
 
-
 :- dfs("Agartala", "Hubli",  ["Agartala"], []).
