@@ -2,11 +2,13 @@
 :- consult("edges.pl").
 :- consult("heuristic.pl").
 
+
 indexOf([Element|_], Element, 0):- !.
 indexOf([_|Tail], Element, Index):-
   indexOf(Tail, Element, Index1),
   !,
   Index is Index1+1.
+
 
 getMinElement(Open, H, Destination) :- 
 	findall(Heurstic_Cost, ( member(S, Open), heuristic(S ,Destination , Heurstic_Cost)), List_of_heurstic_cost_to_destination),
@@ -21,6 +23,8 @@ addAssert(S, [H|T]) :-
 	retractall(predecessor(_, H)),
 	asserta(predecessor(S, H)),
 	addAssert(S, T).
+
+
 
 retracepath(Destination, Source, Cost) :-
 	(
@@ -74,4 +78,3 @@ bfs(Source, Destination, Open, Closed) :-
 			)
 		)
 	).
-:- bfs("Agartala", "Gwalior",  ["Agartala"], []).
