@@ -80,14 +80,13 @@ search(Source, Destination, Open, Closed, Choice) :-
 					!
 				);
 				(
-					reverse(ListOfUnvisitedSuccessors, ListOfUnvisitedSuccessors1),
 					(
 						(
 							Choice = 3,
-							append(Open1, ListOfUnvisitedSuccessors1, Open2)	% append successors in end of Open (Breadth First Search)
+							append(Open1, ListOfUnvisitedSuccessors, Open2)	% append successors in end of Open (Breadth First Search)
 						);
 						(
-							append(ListOfUnvisitedSuccessors1, Open1, Open2)	% append successors in front of Open
+							append(ListOfUnvisitedSuccessors, Open1, Open2)	% append successors in front of Open
 						)
 					),
 					search(Source, Destination, Open2, Closed1, Choice)			% repeat
